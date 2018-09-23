@@ -1,0 +1,8 @@
+---
+
+- include_tasks: inner.yaml
+  loop: "{{ vmware_datacenters | dict2items }}"
+  loop_control:
+    loop_var: outer_item
+  when: >
+    outer_item.value.clusters is defined

@@ -1,0 +1,18 @@
+---
+
+- name: Configure vCenter datacenter
+  vmware_cluster:
+    hostname: "{{ vcenter_auth.hostname | default(omit) }}"
+    username: "{{ vcenter_auth.username | default(omit) }}"
+    password: "{{ vcenter_auth.password | default(omit) }}"
+    port: "{{ vcenter_auth.port | default(omit) }}"
+    validate_certs: "{{ vcenter_auth.validate_certs | default(omit) }}"
+    cluster_name: "{{ item.value.name | default(item.key) }}"
+    datacenter_name: "{{ outer_item.value.name | default(outer_item.key) }}"
+    state: "{{ item.value.state | default(omit) }}" 
+    enable_drs: "{{ item.value.enable_drs | default(omit) }}"
+    enable_ha: "{{ item.value.enable_ha | default(omit) }}"
+    enable_vsan: "{{ item.value.enable_vsan | default(omit) }}"    
+  loop: "{{ outer_item.value.clusters | dict2items }}"
+  tags:
+    - vmware_cluster
